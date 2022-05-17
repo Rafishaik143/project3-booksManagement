@@ -20,7 +20,7 @@ const UserCreate = async function (req, res) {
                     msg: "Invalid request parameters. Please provide user Details",
                 });
             return
-        }
+        }  
 
         if (!Validation.isValidTitle(requestBody.title)) {
             return res.status(400).send({ status: false, message: 'title is required!' })
@@ -65,6 +65,7 @@ const UserCreate = async function (req, res) {
         if (!Validation.isValidField(requestBody.password))
 
             return res.status(400).send({ status: false, message: 'password is required!' });
+            
         if (!/^[a-zA-Z0-9!@#$%^&*]{8,15}$/.test(requestBody.password)) {
             return res.status(400).send({ status: false, message: 'password shouldbe minimum 8 chartacters' })
         }

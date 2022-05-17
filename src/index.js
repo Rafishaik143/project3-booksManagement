@@ -32,6 +32,7 @@ app.use((req, res, next) => {
         status: 404,
         error: `Not found ${req.url}`
     })
+    next()
 })
 
 app.listen(process.env.PORT || 3000, (err)=> {

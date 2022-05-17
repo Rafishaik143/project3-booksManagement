@@ -108,7 +108,16 @@ const reviewupdate = async function (req, res) {
                 { $set: { rating: requestBody.rating, review: requestBody.review, reviewedBy: requestBody.reviewedBy } },
                 { new: true }
             )
-            return res.status(201).send({ status: true, msg: "Updated data", data: updatedreview })
+
+
+            const reviewsData = await reviewModel.find({bookId:data.bookId})
+            .select({_id:1 ,bookId:1,reviewedBy:1,reviewedAt:1,rating:1,review:1})
+        
+            const result= {
+                updatedreview,
+                reviewsData:reviewsData
+            }
+            return res.status(201).send({ status: true, msg: "Updated data", data: result })
         }
 
     } catch (err) {

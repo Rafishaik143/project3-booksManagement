@@ -36,7 +36,7 @@ const bookcreate = async function (req, res) {
 
         if (!Validation.isValidField(requestBody.ISBN))
             return res.status(400).send({ status: false, message: 'ISBN No. is required!' });
-            
+
         let ISBNexist = await bookModel.findOne({ ISBN: requestBody.ISBN })
         if (ISBNexist)
             return res.status(400).send({ status: false, message: 'ISBN no. is already exist!' })
@@ -93,7 +93,9 @@ const getBooks = async function (req, res) {
         if (userId && !mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).send({ status: false, msg: "userid not valid" })
         }
-
+        //  if(!userId) {
+        //     return res.status(400).send({ status: false, msg: "userid is empty" })
+        //  }
         // filtering by query
         const filterdBooks = await bookModel.find({ $and: [{ isDeleted: false }, query] })
             .select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1, subcategory: 1 });
@@ -124,18 +126,11 @@ const getBook = async function(req, res){
     }
 
     const findBook = await bookModel.findOne({$and:[{_id:bookId},{isDeleted:false}]})
-    const reviewsData = await reviewModel.find({bookId:bookId})
-    .select({_id:1 ,bookId:1,reviewedBy:1,reviewedAt:1,rating:1,review:1})
-
-    const result= {
-        data:findBook,
-        reviewsData:reviewsData
-    }
-
+    
     //let findBook = await Booksmodel.find({ $and : [{ $and :[{isDeleted : false}]}, {$or : [{userId : bookData.userId}, {category : bookData.category}, {subcategory : bookData.subcategory}]}]})
         if(!findBook)
         return res.status(404).send({status : false, msg : 'No such book exist'})
-    res.status(200).send({status : true ,  data: result})
+    res.status(200).send({status : true , msg:'All books' ,data: findBook})
 
     }
     catch(err){
